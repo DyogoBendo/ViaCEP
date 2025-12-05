@@ -2,18 +2,18 @@ import React, { useState } from 'react';
 import { Search, MapPin, Building, Hash, Navigation, AlertCircle, Loader2, X } from 'lucide-react';
 
 export default function App() {
-  // Estados de controle da interface
+  // Controle de abas e estados visuais
   const [activeTab, setActiveTab] = useState('cep'); // 'cep', 'address', 'id'
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [result, setResult] = useState(null);
 
-  // Estados dos formulários
+  // Estados dos inputs (necessários para o formulário funcionar visualmente)
   const [cep, setCep] = useState('');
   const [addressData, setAddressData] = useState({ street: '', city: '', uf: '' });
   const [idValue, setIdValue] = useState('');
 
-  // Máscara simples para CEP
+  // Máscara visual para CEP (UX)
   const handleCepChange = (e) => {
     let value = e.target.value.replace(/\D/g, '');
     if (value.length > 8) value = value.slice(0, 8);
@@ -21,68 +21,27 @@ export default function App() {
     setCep(value);
   };
 
-  // Função para limpar a busca
+  // Limpa estados ao trocar de aba
   const clearSearch = () => {
     setResult(null);
     setError('');
   };
 
-  // Função Principal de Busca
-  const handleSearch = async (e) => {
+  // Função Placeholder para futura integração
+  const handleSearch = (e) => {
     e.preventDefault();
     clearSearch();
     setLoading(true);
 
-    try {
-      if (activeTab === 'cep') {
-        // Lógica REAL do ViaCEP
-        const cleanCep = cep.replace(/\D/g, '');
-        if (cleanCep.length !== 8) {
-          throw new Error('O CEP deve conter 8 dígitos.');
-        }
+    // TODO: AQUI VOCÊ VAI INTEGRAR COM A API DO SEU AMIGO E O VIACEP
+    console.log("Iniciando busca...", { activeTab, cep, addressData, idValue });
 
-        const response = await fetch(`https://viacep.com.br/ws/${cleanCep}/json/`);
-        const data = await response.json();
-
-        if (data.erro) {
-          throw new Error('CEP não encontrado na base de dados.');
-        }
-
-        setResult({
-          type: 'ViaCEP',
-          logradouro: data.logradouro,
-          bairro: data.bairro,
-          localidade: data.localidade,
-          uf: data.uf,
-          cep: data.cep,
-          complemento: data.complemento,
-          ddd: data.ddd
-        });
-
-      } else {
-        // Lógica MOCK (Simulação para a API do seu amigo)
-        await new Promise(resolve => setTimeout(resolve, 1500)); // Simula delay de rede
-
-        // Simulação de erro aleatório ou sucesso para teste
-        if (activeTab === 'id' && !idValue) throw new Error('Por favor, informe um ID.');
-        if (activeTab === 'address' && !addressData.city) throw new Error('Informe pelo menos a cidade.');
-
-        setResult({
-          type: 'API Interna (Simulação)',
-          logradouro: activeTab === 'address' && addressData.street ? addressData.street : 'Rua Exemplo Simulado',
-          bairro: 'Centro',
-          localidade: activeTab === 'address' && addressData.city ? addressData.city : 'Cidade Teste',
-          uf: activeTab === 'address' && addressData.uf ? addressData.uf : 'SP',
-          cep: '00000-000',
-          id: activeTab === 'id' ? idValue : '12345',
-          obs: 'Dados retornados pela API (Simulado)'
-        });
-      }
-    } catch (err) {
-      setError(err.message || 'Erro ao buscar endereço.');
-    } finally {
+    // Apenas para simular o loading visual por 1 segundo (pode remover depois)
+    setTimeout(() => {
       setLoading(false);
-    }
+      // Exemplo de como setar o resultado manualmente para testar o layout:
+      // setResult({ logradouro: 'Rua Teste', bairro: 'Bairro', localidade: 'Cidade', uf: 'UF', cep: '00000-000' });
+    }, 1000);
   };
 
   return (
@@ -97,7 +56,7 @@ export default function App() {
               <MapPin className="w-6 h-6" />
               Busca de Endereços
             </h1>
-            <p className="text-blue-200 text-sm mt-1">Localize dados via CEP ou API Interna</p>
+            <p className="text-blue-200 text-sm mt-1">Localize dados via CEP ou ID</p>
           </div>
           <div className="bg-blue-600 p-2 rounded-lg">
             <Search className="w-6 h-6 text-blue-100" />
@@ -133,7 +92,7 @@ export default function App() {
         </div>
 
         <div className="p-6">
-          {/* Formulários Dinâmicos */}
+          {/* Formulários */}
           <form onSubmit={handleSearch} className="space-y-4">
             
             {/* INPUT: CEP */}
@@ -177,7 +136,6 @@ export default function App() {
                       <option value="RJ">RJ</option>
                       <option value="MG">MG</option>
                       <option value="PR">PR</option>
-                      {/* Adicionar outros estados conforme necessário */}
                     </select>
                   </div>
                 </div>
@@ -208,7 +166,7 @@ export default function App() {
               </div>
             )}
 
-            {/* Botão de Ação */}
+            {/* Botão de Ação (Apenas Visual por enquanto) */}
             <button
               type="submit"
               disabled={loading}
@@ -222,24 +180,24 @@ export default function App() {
               ) : (
                 <>
                   <Search className="w-5 h-5" />
-                  Consultar Endereço
+                  Consultar
                 </>
               )}
             </button>
           </form>
 
-          {/* Área de Erro */}
+          {/* Área de Erro (Renderização Condicional mantida para uso futuro) */}
           {error && (
-            <div className="mt-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-r flex items-start gap-3 animate-in fade-in slide-in-from-top-2">
+            <div className="mt-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-r flex items-start gap-3">
               <AlertCircle className="w-5 h-5 mt-0.5 flex-shrink-0" />
               <div>
-                <p className="font-bold">Ops! Algo deu errado.</p>
+                <p className="font-bold">Erro</p>
                 <p className="text-sm">{error}</p>
               </div>
             </div>
           )}
 
-          {/* Área de Resultados */}
+          {/* Área de Resultados (Renderização Condicional mantida para uso futuro) */}
           {result && !loading && (
             <div className="mt-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
               <div className="relative border border-slate-200 rounded-xl p-5 bg-slate-50">
@@ -252,14 +210,13 @@ export default function App() {
 
                 <div className="flex items-center gap-2 mb-4">
                   <span className="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded border border-green-200 uppercase">
-                    Sucesso
+                    Resultado Encontrado
                   </span>
-                  <span className="text-xs text-slate-400 font-mono">Fonte: {result.type}</span>
                 </div>
 
                 <div className="space-y-4">
                   <div>
-                    <h3 className="text-xl font-bold text-slate-800">{result.logradouro || 'Logradouro não informado'}</h3>
+                    <h3 className="text-xl font-bold text-slate-800">{result.logradouro || 'Logradouro'}</h3>
                     <p className="text-slate-500">
                       {result.bairro ? `${result.bairro}, ` : ''} {result.localidade} - {result.uf}
                     </p>
@@ -270,29 +227,18 @@ export default function App() {
                       <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">CEP</p>
                       <p className="font-mono text-slate-700 font-medium">{result.cep}</p>
                     </div>
-                    {result.ddd && (
-                      <div>
-                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">DDD</p>
-                        <p className="font-mono text-slate-700 font-medium">{result.ddd}</p>
-                      </div>
-                    )}
-                    {result.id && (
-                       <div>
-                       <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">ID Interno</p>
-                       <p className="font-mono text-slate-700 font-medium">#{result.id}</p>
-                     </div>
-                    )}
+                    {/* Outros campos podem ser adicionados aqui */}
                   </div>
                 </div>
               </div>
             </div>
           )}
 
-          {/* Estado Vazio / Placeholder */}
+          {/* Estado Inicial */}
           {!result && !error && !loading && (
             <div className="mt-8 text-center py-8 opacity-40">
               <MapPin className="w-16 h-16 mx-auto mb-3 text-slate-400" />
-              <p className="text-slate-500 font-medium">Preencha os dados acima para buscar</p>
+              <p className="text-slate-500 font-medium">Preencha os dados para buscar</p>
             </div>
           )}
 
