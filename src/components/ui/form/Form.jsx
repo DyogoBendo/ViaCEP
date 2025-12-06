@@ -1,4 +1,4 @@
-import CadastroEndereco from "./CadastroEndereco";
+import CadastroEndereco from "../../endereco/CadastroEndereco";
 import CepForm from "./CepForm";
 import IdForm from "./IdForm";
 import SubmitButton from "./SubmitButton";

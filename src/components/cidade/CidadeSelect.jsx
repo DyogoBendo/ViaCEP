@@ -1,4 +1,4 @@
-import APIService from "../APIService";
+import APIService from "../../APIService";
 import { useState, useEffect } from 'react';
 
 export default function CidadeSelect({addressData, setAddressData, setLoading}){

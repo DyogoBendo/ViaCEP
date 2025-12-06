@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Search, MapPin, Building, Hash, Navigation, AlertCircle, Loader2, X } from 'lucide-react';
 import APIService from './APIService';
-import Header from './components/Header';
-import Navbar from './components/Navbar';
-import CepForm from './components/CepForm';
-import IdForm from './components/IdForm';
-import CadastroEnderecoForm from './components/CadastroEndereco';
-import SubmitButton from './components/SubmitButton';
-import Resultado from './components/Resultado';
-import Form from './components/Form';
+import Header from './components/ui/Header';
+import Navbar from './components/ui/Navbar';
+import CepForm from './components/ui/form/CepForm';
+import IdForm from './components/ui/form/IdForm';
+import CadastroEnderecoForm from './components/endereco/CadastroEndereco';
+import SubmitButton from './components/ui/form/SubmitButton';
+import Resultado from './components/ui/form/Resultado';
+import Form from './components/ui/form/Form';
 
 export default function App() {
   // Controle de abas e estados visuais

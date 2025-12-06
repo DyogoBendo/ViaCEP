@@ -1,9 +1,9 @@
 import { useState } from "react";
-import APIService from "../APIService";
-import CidadeSelect from "./CidadeSelect";
-import BairroSelect from "./BairroSelect";
-import LogradouroSelect from "./LogradouroSelect";
-import CepForm from "./CepForm";
+import APIService from "../../APIService";
+import CidadeSelect from "../cidade/CidadeSelect";
+import BairroSelect from "../bairro/BairroSelect";
+import LogradouroSelect from "../logradouro/LogradouroSelect";
+import CepForm from "../ui/form/CepForm";
 
 export default function CadastroEndereco({addressData, setAddressData, setLoading, handleCepChange}){
     return(

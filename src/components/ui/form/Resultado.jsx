@@ -1,6 +1,6 @@
 import { X } from 'lucide-react';
-import ResultadoEndereco from './ResultadoEndereco';
-import ResultadoCidade from './ResultadoCidade';
+import ResultadoEndereco from '../../endereco/ResultadoEndereco';
+import ResultadoCidade from '../../cidade/ResultadoCidade';
 
 export default function Resultado({clearSearch, result, activeTab}){
     return (

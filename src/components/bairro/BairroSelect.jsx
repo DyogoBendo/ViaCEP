@@ -1,35 +1,35 @@
-import APIService from "../APIService";
+import APIService from "../../APIService";
 import { useState, useEffect } from 'react';
 
-export default function LogradouroSelect({addressData, setAddressData, setLoading}){
-    const [logradouros, setLogradouros] = useState([]);
+export default function BairroSelect({addressData, setAddressData, setLoading}){
+    const [bairros, setBairros] = useState([]);
 
     useEffect(() => {
-        APIService.obterLogradouros()
-        .then((data) => setLogradouros(data))
+        APIService.obterBairros()
+        .then((data) => setBairros(data))
         .catch((error) => console.error('Error in fetching', error))
         .finally(() => setLoading(false))
     }, [])
 
     return (
         <div className="md:col-span-2 space-y-1">
-            <label className="text-xs font-bold text-slate-500 uppercase">Logradouro</label>
+            <label className="text-xs font-bold text-slate-500 uppercase">Bairro</label>
             <select
-                value={addressData.logradouro?.id || ""}
+                value={addressData.bairro?.id || ""}
                 onChange={(e) => {
-                    const selected = logradouros.find(c => c.id === Number(e.target.value));
+                    const selected = bairros.find(c => c.id === Number(e.target.value));
                     setAddressData({
                     ...addressData,
-                    logradouro: selected || null
+                    bairro: selected || null
                     });
                 }}
                 className="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-500 outline-none"
                 >
                 <option value="">Selecione...</option>
 
-                {logradouros.map(l => (
-                    <option key={l.id} value={l.id}>
-                    {l.tipoLogradouro?.nome} {l.nome}
+                {bairros.map(b => (
+                    <option key={b.id} value={b.id}>
+                    {b.nome}
                     </option>
                 ))}
             </select>
